@@ -10,7 +10,8 @@ Es un sistema ASP.NET MVC que cuenta con los siguientes modulos:
 
 Se requiere Visual Studio(Asp.NET (.Net Framework)/C#) y MSSQL Express Version 13.0
 - Restaurar base de datos en MSSQL `inventarioJuguetes.bak`
-- Abrir solucion de Visual Studio `MVCA_Inventario.sln`
+- Descargar o Clonar Solucion desde GitHub.
+  - En caso de descargar el archivo .zip abrir solucion de Visual Studio `MVCA_Inventario.sln`
 - Buscar archivo `Web.Config` donde se editara la siguiente cadena de conexión a base de datos.
 ```bash
 <add name="Connection" connectionString="Data Source= ;Initial Catalog=inventarioJuguetes;Integrated Security=True; User ID=sa;Password=123" providerName="System.Data.SqlClient"/>
