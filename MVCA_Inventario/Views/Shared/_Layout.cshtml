@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+
+<html ng-app="HomeApp">
+<head runat="server">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Registro de Alumnos</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/materialize/css/materialize.min.css" media="screen,projection" />
+    <!-- Bootstrap Styles-->
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link href="~/Content/css/custom-styles.css" rel="stylesheet" />
+    <!-- Google Fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+    <script src="~/Content/js/jquery-3.2.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('HomeApp', []);
+        app.controller('HomeController', function ($scope, $http)
+        {
+            $http({
+                method: 'GET',
+                url: '@Url.Action("getProduct", "Home")',
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            }).then(function (response) {
+                debugger;
+                $scope.product = JSON.parse(response.data);
+            }, function (error) {
+                console.log(error);
+            });
+
+            $scope.addProduct = function () {
+                debugger;
+                var eee = $scope.model;
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("addProduct", "Home")',
+                    data: $scope.model,
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                }).then(function (response)
+                {
+                    $scope.product = JSON.parse(response.data);
+                    $scope.message = "Producto Agregado Correctamente";
+
+                    $("#AddModal").modal("toggle");
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+
+
+            $scope.selectProduct = function (d)
+            {
+                $scope.selectedProduct = d;
+            }
+
+            $scope.updateProduct = function ()
+            {
+                var eee = $scope.selectedProduct;
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("updateProduct", "Home")',
+                    data: $scope.selectedProduct,
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                }).then(function (response) {
+                    $scope.product = JSON.parse(response.data);
+                    $scope.message = "Producto Actualizado Correctamente";
+                    $("#EditModal").modal("toggle");
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+
+            $scope.deleteProduct = function (d)
+            {
+                if (confirm("¿Quieres eliminar este registro?"))
+                {
+                    $http({
+                    method: 'POST',
+                    url: '@Url.Action("deleteProduct", "Home")',
+                    data: d,
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                }).then(function (response) {
+                    $scope.product = JSON.parse(response.data);
+                    $scope.message = "Producto Eliminado Correctamente";
+                    $("#EditModal").modal("toggle");
+                }, function (error) {
+                    console.log(error);
+                });
+                }
+
+            }
+
+            $scope.clearModel = function () {
+                $scope.model = null;
+            }
+        });
+    </script>
+
+</head>
+<body>
+        <div>
+            <nav class="navbar navbar-default top-navbar" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle waves-effect waves-dark" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand waves-effect waves-dark"><i class="large material-icons">assessment</i> <strong>Inventario</strong></a>
+
+                    <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
+                </div>
+
+
+            </nav>
+            <!--/. NAV TOP  -->
+            <nav class="navbar-default navbar-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li>
+                            <a class="waves-effect waves-dark" href="@Url.Action("Index", "Home")"><i class="glyphicon glyphicon-home"></i>Inicio</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Inventario", "Home")" class="waves-effect waves-dark"><i class="glyphicon glyphicon-list-alt"></i>Inventario</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </nav>
+            <!-- /. NAV SIDE  -->
+
+            <div id="page-wrapper" ng-controller="HomeController">
+
+                <!-- /. PAGE INNER  -->
+
+                @RenderBody()
+            </div>
+
+            <!-- /. PAGE WRAPPER  -->
+        </div>
+
+
+        <!-- JS Scripts-->
+        <!-- jQuery Js -->
+
+        <!-- Bootstrap Js -->
+        <script src="~/Content/js/bootstrap.min.js"></script>
+
+        <script src="~/Content/materialize/js/materialize.min.js"></script>
+
+        <!-- Metis Menu Js -->
+        <script src="~/Content/js/jquery.metisMenu.js"></script>
+
+
+        <!-- Custom Js -->
+        <script src="~/Content/js/custom-scripts.js"></script>
+</body>
+</html>
